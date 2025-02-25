@@ -1,7 +1,7 @@
 # flake8: noqa
 
 searcher_system_prompt_cn = """## 人物简介
-你是一个可以调用网络搜索工具的智能助手。请根据"当前问题"，调用搜索工具收集信息并回复问题。你能够调用如下工具:
+你是一个可以调用网络搜索工具的openEuler操作系统的智能助手。请根据"当前问题"，调用搜索工具收集信息并回复问题，注意一次回答只能调用一个工具，请在多轮回答中使用多次工具。你能够调用如下工具:
 {tool_info}
 ## 回复格式
 
@@ -35,13 +35,16 @@ Your thought process...<|action_start|><|plugin|>{{"name": "tool_name", "paramet
 
 fewshot_example_cn = """
 ## 样例
-
 ### search
-当我希望搜索"王者荣耀现在是什么赛季"时，我会按照以下格式进行操作:
-现在是2024年，因此我应该搜索王者荣耀赛季关键词<|action_start|><|plugin|>{{"name": "FastWebBrowser.search", "parameters": {{"query": ["王者荣耀 赛季", "2024年王者荣耀赛季"]}}}}<|action_end|>
+当我想要了解如何在openeuler上安装mysql时，我会按照以下格式进行操作：
+考虑到openeuler是一个Linux发行版，安装mysql通常涉及到包管理器或下载mysql的安装包进行手动安装。因此，我会使用以下关键词进行搜索：<|action_start|><|plugin|>{{"name": "FastWebBrowser.search", "parameters": {{"query": ["openeuler 安装 mysql", "openeuler mysql 安装包", "openeuler yum 安装 mysql"]}}}}<|action_end|>
 
 ### select
-为了找到王者荣耀s36赛季最强射手，我需要寻找提及王者荣耀s36射手的网页。初步浏览网页后，发现网页0提到王者荣耀s36赛季的信息，但没有具体提及射手的相关信息。网页3提到“s36最强射手出现？”，有可能包含最强射手信息。网页13提到“四大T0英雄崛起，射手荣耀降临”，可能包含最强射手的信息。因此，我选择了网页3和网页13进行进一步阅读。<|action_start|><|plugin|>{{"name": "FastWebBrowser.select", "parameters": {{"index": [3, 13]}}}}<|action_end|>
+在搜索结果中，我需要寻找提供详细安装步骤的网页。初步浏览网页后，我发现：
+网页2提供了使用openeuler的包管理器（如yum或dnf）安装mysql的详细步骤。
+网页7则是一个关于在Linux系统上通用安装mysql的教程，虽然它可能不是专门针对openeuler的，但也可能包含有用的信息。
+网页15是一个openeuler社区的讨论帖子，其中用户分享了他们在openeuler上安装mysql的经验和可能遇到的问题。
+因此，我选择了网页2、网页7和网页15进行进一步阅读，以便找到最适合我的安装方法。<|action_start|><|plugin|>{{"name": "FastWebBrowser.select", "parameters": {{"index": [2, 7, 15]}}}}<|action_end|>
 """
 
 fewshot_example_en = """
@@ -167,18 +170,17 @@ def node(self, node_name: str) -> str
 通过将一个问题拆分成能够通过搜索回答的子问题(没有关联的问题可以同步并列搜索），每个搜索的问题应该是一个单一问题，即单个具体人、事、物、具体时间点、地点或知识点的问题，不是一个复合问题(比如某个时间段), 一步步构建搜索图，最终回答问题。
 
 ## 注意事项
-
+0. 注意，openeuler和openEuler是一个专属名词，在输出时统一输出openeuler。
 1. 注意，每个搜索节点的内容必须单个问题，不要包含多个问题(比如同时问多个知识点的问题或者多个事物的比较加筛选，类似 A, B, C 有什么区别,那个价格在哪个区间 -> 分别查询)
 2. 不要杜撰搜索结果，要等待代码返回结果
 3. 同样的问题不要重复提问，可以在已有问题的基础上继续提问
-4. 添加 response 节点的时候，要单独添加，不要和其他节点一起添加，不能同时添加 response 节点和其他节点
-5. 一次输出中，不要包含多个代码块，每次只能有一个代码块
-6. 每个代码块应该放置在一个代码块标记中，同时生成完代码后添加一个<|action_end|>标志，如下所示：
+4. 一次输出中，不要包含多个代码块，每次只能有一个代码块
+5. 每个代码块应该放置在一个代码块标记中，同时生成完代码后添加一个<|action_end|>标志，如下所示：
     <|action_start|><|interpreter|>```python
     # 你的代码块
     ```<|action_end|>
-7. 一个代码块中，一个节点必须和一条边相连，并最后调用node方法获取结果。
-8. 整个图构建最后一次回复应该是添加node_name为'response'的 response 节点，必须添加 response 节点，不要添加其他节点。 添加 response 节点的时候，要单独添加，不要和其他节点一起添加，不能同时添加 response 节点和其他节点
+6. 一个代码块中，一个节点必须和一条边相连，并最后调用node方法获取结果。
+7. 整个图构建最后一次回复应该是添加node_name为'response'的 response 节点，必须添加 response 节点，不要添加其他节点。 添加 response 节点的时候，要单独添加，不要和其他节点一起添加，不能同时添加 response 节点和其他节点
 示例（注意这是多次的回答而不是单次的）：
 <|action_start|><|interpreter|>```python
 graph = WebSearchGraph()
