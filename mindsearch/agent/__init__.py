@@ -1,3 +1,4 @@
+import json
 import os
 from copy import deepcopy
 from datetime import datetime
@@ -24,6 +25,14 @@ from .mindsearch_prompt import (
 
 LLM = {}
 
+# 读取配置文件
+config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
+with open(config_path, 'r') as config_file:
+    config = json.load(config_file)
+
+WEB_SEARCH_API_KEY = config.get('WEB_SEARCH_API_KEY')
+TENCENT_SEARCH_SECRET_ID = config.get('TENCENT_SEARCH_SECRET_ID')
+TENCENT_SEARCH_SECRET_KEY = config.get('TENCENT_SEARCH_SECRET_KEY')
 
 def init_agent(lang="cn",
                model_format="internlm_server",
@@ -48,13 +57,13 @@ def init_agent(lang="cn",
         type=AsyncWebBrowser if use_async else WebBrowser,
         searcher_type=search_engine,
         topk=6,
-        secret_id=os.getenv("TENCENT_SEARCH_SECRET_ID"),
-        secret_key=os.getenv("TENCENT_SEARCH_SECRET_KEY"),
+        secret_id=TENCENT_SEARCH_SECRET_ID,
+        secret_key=TENCENT_SEARCH_SECRET_KEY,
     ) if search_engine == "TencentSearch" else dict(
         type=AsyncWebBrowser if use_async else WebBrowser,
         searcher_type=search_engine,
         topk=6,
-        api_key=os.getenv("WEB_SEARCH_API_KEY"),
+        api_key=WEB_SEARCH_API_KEY,
     ))]
     agent = (AsyncMindSearchAgent if use_async else MindSearchAgent)(
         llm=llm,
