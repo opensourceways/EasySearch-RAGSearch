@@ -8,8 +8,14 @@ from lagent.llms import (
     LMDeployClient,
     LMDeployServer,
 )
+# 使用环境变量读取配置文件路径
+config_path_env = os.getenv('CONFIG_PATH')
+if config_path_env:
+    config_path = config_path_env
+else:
+    config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
+    
 # 读取配置文件
-config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
 with open(config_path, 'r') as config_file:
     config = json.load(config_file)
 
