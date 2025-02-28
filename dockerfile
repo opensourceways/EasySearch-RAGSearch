@@ -4,6 +4,10 @@ FROM python:3.11.9-slim
 # 设置工作目录
 WORKDIR /app
 
+# 创建一个非 root 用户
+
+RUN useradd -m -u 1000 appuser
+
 # 复制当前目录下的所有文件到工作目录
 
 COPY mindsearch /app/mindsearch
@@ -29,6 +33,9 @@ RUN pip install  --no-cache-dir --index-url https://pypi.tuna.tsinghua.edu.cn/si
     tenacity \
     gradio \
     gradio==5.7.1
+
+# 切换为非 root 用户
+USER appuser
 
 # 暴露应用程序的端口
 EXPOSE 8002
