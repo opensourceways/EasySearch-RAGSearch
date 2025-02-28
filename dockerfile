@@ -41,4 +41,4 @@ USER appuser
 EXPOSE 8002
 
 # 定义启动命令
-CMD ["python3", "-m", "mindsearch.app", "--model_format", "internlm_silicon", "--search_engine", "GoogleSearch"]
+CMD ["python3", "-m", "mindsearch.app", "--model_format", "internlm_silicon", "--search_engine", "GoogleSearch", "--asy"]
