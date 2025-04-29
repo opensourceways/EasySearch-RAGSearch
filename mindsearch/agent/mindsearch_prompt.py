@@ -37,13 +37,13 @@ fewshot_example_cn = """
 ## 样例
 ### search
 当我想要了解如何在openeuler上安装mysql时，我会按照以下格式进行操作：
-考虑到openeuler是一个Linux发行版，安装mysql通常涉及到包管理器或下载mysql的安装包进行手动安装。因此，我会使用以下关键词进行搜索：<|action_start|><|plugin|>{{"name": "FastWebBrowser.search", "parameters": {{"query": ["openeuler 安装 mysql", "openeuler mysql 安装包", "openeuler yum 安装 mysql"]}}}}<|action_end|>
+考虑到openeuler是一个Linux发行版，安装mysql通常涉及到包管理器或下载mysql的安装包进行手动安装。因此，我会使用以下关键词进行搜索：<|action_start|><|plugin|>{{"name": "FastWebBrowser.search", "parameters": {{"query": ["openEuler 安装 mysql", "openEuler mysql 安装包", "openEuler yum 安装 mysql"]}}}}<|action_end|>
 
 ### select
 在搜索结果中，我需要寻找提供详细安装步骤的网页。初步浏览网页后，我发现：
-网页2提供了使用openeuler的包管理器（如yum或dnf）安装mysql的详细步骤。
-网页7则是一个关于在Linux系统上通用安装mysql的教程，虽然它可能不是专门针对openeuler的，但也可能包含有用的信息。
-网页15是一个openeuler社区的讨论帖子，其中用户分享了他们在openeuler上安装mysql的经验和可能遇到的问题。
+网页2提供了使用openEuler的包管理器（如yum或dnf）安装mysql的详细步骤。
+网页7则是一个关于在Linux系统上通用安装mysql的教程，虽然它可能不是专门针对openEuler的，但也可能包含有用的信息。
+网页15是一个openEuler社区的讨论帖子，其中用户分享了他们在openEuler上安装mysql的经验和可能遇到的问题。
 因此，我选择了网页2、网页7和网页15进行进一步阅读，以便找到最适合我的安装方法。<|action_start|><|plugin|>{{"name": "FastWebBrowser.select", "parameters": {{"index": [2, 7, 15]}}}}<|action_end|>
 """
 
@@ -172,7 +172,7 @@ def node(self, node_name: str) -> str
 通过将一个问题拆分成能够通过搜索回答的子问题(没有关联的问题可以同步并列搜索），每个搜索的问题应该是一个单一问题，即单个具体人、事、物、具体时间点、地点或知识点的问题，不是一个复合问题(比如某个时间段), 一步步构建搜索图，最终回答问题。
 
 ## 注意事项
-0. 请确保在输出中准确无误地保留以下专有名词的完整拼写： openeuler。不要将其缩写、更改或替换为其他字符或词汇。openeuler是一个操作系统的名称，应在上下文中正确引用
+0. 请确保在输出中准确无误地保留以下专有名词的完整拼写： openEuler。不要将其缩写、更改或替换为其他字符或词汇。openEuler是一个操作系统的名称，应在上下文中正确引用
 1. 注意，每个搜索节点的内容必须单个问题，不要包含多个问题(比如同时问多个知识点的问题或者多个事物的比较加筛选，类似 A, B, C 有什么区别,那个价格在哪个区间 -> 分别查询)
 2. 不要杜撰搜索结果，要等待代码返回结果
 3. 同样的问题不要重复提问，可以在已有问题的基础上继续提问
